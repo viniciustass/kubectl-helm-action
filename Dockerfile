@@ -1,12 +1,8 @@
 FROM dtzar/helm-kubectl:3.2.0
 
 RUN apk update \
-    && apk --no-cache add curl \
-    && apk --no-cache add unzip \
-    && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
-    && unzip awscliv2.zip \
-    && ./aws/install  
-
+    apk add --no-cache aws-cli
+    
 WORKDIR /app
 
 COPY run.sh .
