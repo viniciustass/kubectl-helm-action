@@ -1,31 +1,11 @@
-FROM ubuntu:18.04
+FROM dtzar/helm-kubectl:3.2.0
 
-ARG VCS_REF
-ARG BUILD_DATE
-
-# Metadata
-LABEL org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.name="helm-kubectl" \
-      org.label-schema.url="https://hub.docker.com/r/dtzar/helm-kubectl/" \
-      org.label-schema.vcs-url="https://github.com/dtzar/helm-kubectl" \
-      org.label-schema.build-date=$BUILD_DATE
-
-# Note: Latest version of kubectl may be found at:
-# https://github.com/kubernetes/kubernetes/releases
-ENV KUBE_LATEST_VERSION="v1.20.2"
-# Note: Latest version of helm may be found at
-# https://github.com/kubernetes/helm/releases
-ENV HELM_VERSION="v3.5.0"
-
-RUN apt update -y && apt -y install bash git curl openssh-client wget awscli \
-    && wget -q https://storage.googleapis.com/kubernetes-release/release/${KUBE_LATEST_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl \
-    && chmod +x /usr/local/bin/kubectl \
-    && wget -q https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm \
-    && chmod +x /usr/local/bin/helm \
-    && chmod g+rwx /root \
-    && mkdir /config \
-    && chmod g+rwx /config \
-    && helm repo add "stable" "https://charts.helm.sh/stable" --force-update
+RUN apk update \
+    && apk --no-cache add curl \
+    && apk --no-cache add unzip \
+    && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && ./aws/install  
 
 WORKDIR /app
 
