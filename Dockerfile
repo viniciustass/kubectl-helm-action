@@ -1,12 +1,15 @@
 FROM dtzar/helm-kubectl:3.2.0
 
-RUN apk update \
-    && apk --no-cache add curl \
-    && apk --no-cache add unzip \
-    && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
-    && unzip awscliv2.zip \
-    && ./aws/install -i /usr/local/aws-cli -b /usr/local/bin \
-    && aws --version
+RUN apk add --no-cache \
+        python3 \
+        py3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install \
+        awscli \
+    && rm -rf /var/cache/apk/*
+
+RUN aws --version   # Just to make sure its installed alright
+
     
 WORKDIR /app
 
