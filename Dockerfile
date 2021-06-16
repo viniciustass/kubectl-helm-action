@@ -27,10 +27,6 @@ RUN apt install ca-certificates bash git openssh curl \
     && chmod g+rwx /config \
     && helm repo add "stable" "https://charts.helm.sh/stable" --force-update
 
-WORKDIR /config
-
-CMD bash 
-
 WORKDIR /app
 
 COPY run.sh .
